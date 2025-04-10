@@ -1,0 +1,11 @@
+Leaf node in our b+ tree stores key and val 
+
+KEY can be primary index or if no primary key or indexes are provided we use our built in secondary
+auto incrementing indexes to indentify rows
+
+
+VALUE are pointer or offset to pages stored in disk
+
+
+indexes on column other than primary column ,i.e secondary indexes has key has value of that column and 
+primary key linked together instead of entire row ,to find data instead of storing data

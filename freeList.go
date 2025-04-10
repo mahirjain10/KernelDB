@@ -38,6 +38,8 @@ type FreeList struct {
 	tailSeq  uint64
 	// in-memory states
 	maxSeq uint64 // saved `tailSeq` to prevent consuming newly added items
+	maxVer uint64 // the oldest reader version
+	curVer uint64 // version number when commiting
 }
 
 // get 1 item from the list head.return 0 on failure

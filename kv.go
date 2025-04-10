@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"sync"
+
 	"os"
 	"path"
 	"syscall"
@@ -34,7 +36,17 @@ type KV struct {
 	}
 	failed bool // did the last update fail?
 	free FreeList 
+	version uint64 // monotonic version number; persisted in the meta page,global version counter
+	ongoing []uint64 // version numbers of concurrent TXs , 
+	history [] ComittedTX // change keys, for detecting conflicts // recent commited transaction
+	mutex sync.Mutex // serialization tx methods, serialization means a resource should be modified by a single thread
 }
+
+type CommittedTX struct {
+	version uint64
+	writes []KeyRange // in sorted order
+}
+
 
 func (db *KV) Open() error
 func (db *KV) Get(key []byte) ([]byte, error) {
@@ -270,3 +282,4 @@ func updateOrRevert(db *KV,meta []byte)error{
 	}
 	return err
 }
+
